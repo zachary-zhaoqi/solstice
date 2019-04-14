@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 
-@MapperScan("pers.zhaoqi.solstice.mapper")
+@MapperScan("pers.zhaoqi.solstice.*.mapper")
 @SpringBootApplication
 public class SolsticeApplication {
 

@@ -116,14 +116,16 @@ public class CodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-//        strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");
+        strategy.setSuperEntityClass("pers.zhaoqi.solstice.common.BaseEntity");
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
 //        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
-//        strategy.setSuperEntityColumns("id");
+        strategy.setSuperEntityColumns("id","is_remove","version","create","create_name","create_time","modify","modify_name","modify_time");
         strategy.setControllerMappingHyphenStyle(false);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
+//        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setLogicDeleteFieldName("is_remove");//设置逻辑删除组件
+        strategy.setVersionFieldName("version");
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
