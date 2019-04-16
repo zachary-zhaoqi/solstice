@@ -1,8 +1,10 @@
 package pers.zhaoqi.solstice.user.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pers.zhaoqi.solstice.user.dto.UserInputDTO;
@@ -51,8 +53,14 @@ public class UserLoginController {
     }
 
     private UserOutputDTO creatSessionForAccount(UserInputDTO userInputDTO) {
-
-        return null;
+        UserLogin userLogin = new UserLogin();
+        BeanUtils.copyProperties(userInputDTO,userLogin);
+        QueryWrapper queryWrapper=new QueryWrapper(userLogin);
+        queryWrapper.select("id","user_account","user_password","user_email","user_phone","user_authority","is_remove","version","`create`","create_name","create_time","modify","modify_name","modify_time");//XXX:回头修正为排除password
+        userLogin=service.getOne(queryWrapper);
+        UserOutputDTO userOutputDTO = new UserOutputDTO();
+        BeanUtils.copyProperties(userLogin,userOutputDTO);
+        return userOutputDTO;
     }
 
     private UserOutputDTO creatSessionForPhone(UserInputDTO userInputDTO) {
