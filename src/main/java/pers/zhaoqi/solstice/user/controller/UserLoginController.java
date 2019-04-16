@@ -2,6 +2,8 @@ package pers.zhaoqi.solstice.user.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +33,16 @@ public class UserLoginController {
     public UserLogin getUserLogin(@PathVariable("id") Integer id){
         return service.getById(id);
     }
+
     @ApiOperation(value = "新建会话",notes = "新建会话")
     @PostMapping("/{account}")
-    public UserLogin addUserLogin(Wrapper<UserLogin> userLoginWrapper){
-        UserLogin userLogin=service.getOne(userLoginWrapper);
-
+    public UserLogin addUserLogin(@RequestBody UserLogin userLogin1){
+        QueryWrapper wrapper=new QueryWrapper();
+        wrapper.setEntity(userLogin1);
+        UserLogin userLogin=service.getOne(wrapper);
         return userLogin;
     }
+
     @ApiOperation(value = "更新用户",notes = "更新用户")
     @PutMapping("/{id}")
     public UserLogin updateUserLogin(@PathVariable("id") Integer id){
@@ -48,6 +53,7 @@ public class UserLoginController {
 
         return userLogin;
     }
+
     @DeleteMapping("/{id}")
     public UserLogin deleteUserLogin(@PathVariable("id") Integer id){
 
