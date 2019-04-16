@@ -1,8 +1,6 @@
 package pers.zhaoqi.solstice.brand.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import pers.zhaoqi.solstice.common.BaseEntity;
-import com.baomidou.mybatisplus.annotation.Version;
+import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

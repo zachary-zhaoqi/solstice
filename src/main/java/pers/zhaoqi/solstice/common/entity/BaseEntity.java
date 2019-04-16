@@ -1,4 +1,4 @@
-package pers.zhaoqi.solstice.common;
+package pers.zhaoqi.solstice.common.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;

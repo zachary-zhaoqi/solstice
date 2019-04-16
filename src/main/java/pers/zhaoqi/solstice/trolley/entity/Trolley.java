@@ -1,8 +1,7 @@
 package pers.zhaoqi.solstice.trolley.entity;
 
 import java.math.BigDecimal;
-import pers.zhaoqi.solstice.common.BaseEntity;
-import com.baomidou.mybatisplus.annotation.Version;
+import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

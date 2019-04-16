@@ -1,7 +1,7 @@
 package pers.zhaoqi.solstice.order.entity;
 
-import pers.zhaoqi.solstice.common.BaseEntity;
-import com.baomidou.mybatisplus.annotation.Version;
+import pers.zhaoqi.solstice.common.entity.BaseEntity;
+
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
