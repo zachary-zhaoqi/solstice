@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.user.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,6 +27,7 @@ public class UserLogin extends BaseEntity {
     @ApiModelProperty(value = "用户账号")
     private String userAccount;
 
+    @TableField(select=false)
     @ApiModelProperty(value = "用户密码")
     private String userPassword;
 
