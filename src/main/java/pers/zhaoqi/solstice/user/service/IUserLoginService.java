@@ -1,7 +1,6 @@
 package pers.zhaoqi.solstice.user.service;
 
 import pers.zhaoqi.solstice.user.dto.UserInputDTO;
-import pers.zhaoqi.solstice.user.dto.UserOutputDTO;
 import pers.zhaoqi.solstice.user.entity.UserLogin;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,10 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserLoginService extends IService<UserLogin> {
     /**
      * 通过账户密码进行创建session登录
-     * */
-    UserOutputDTO creatSessionForAccount(UserInputDTO userInputDTO);
+     *
+     * @return*/
+    String creatSessionForAccount(UserInputDTO userInputDTO) throws Exception;
 
-    UserOutputDTO creatSessionForPhone(UserInputDTO userInputDTO);
+    String creatSessionForPhone(UserInputDTO userInputDTO);
 
-    UserOutputDTO creatSessionForEmail(UserInputDTO userInputDTO);
+    String creatSessionForEmail(UserInputDTO userInputDTO);
 }

@@ -41,21 +41,24 @@ public class UserLoginController {
         if (userInputDTO.getUserPassword() == null) {
             return Result.failed(ConstantMessage.WANT_CORRECT_INPUT,"请输入密码");
         }
-        UserOutputDTO userOutputDTO=null;
+        String jwt = null;
         if (userInputDTO.getUserAccount() != null) {
-            userOutputDTO=service.creatSessionForAccount(userInputDTO);//如果有账户就通过账户密码进行创建session登录
+            try {
+                jwt=service.creatSessionForAccount(userInputDTO);//如果有账户就通过账户密码进行创建session登录
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (userInputDTO.getUserPhone() != null) {
-            userOutputDTO=service.creatSessionForPhone(userInputDTO);//如果有手机号就通过手机号进行创建session登录
+            jwt=service.creatSessionForPhone(userInputDTO);//如果有手机号就通过手机号进行创建session登录
         } else if (userInputDTO.getUserEmail() != null) {
-            userOutputDTO=service.creatSessionForEmail(userInputDTO);//如果有邮箱就通过邮箱进行创建session登录
+            jwt=service.creatSessionForEmail(userInputDTO);//如果有邮箱就通过邮箱进行创建session登录
         }else{
             return Result.failed(ConstantMessage.WANT_CORRECT_INPUT,"请输入账户/手机号/邮箱，或使用手机号验证登录");
         }
-        if(userOutputDTO==null){
+        if(jwt==null){
             return Result.failed(ConstantMessage.FAIL_CODE,"账户或密码错误");
         }
-
-        return Result.success(userOutputDTO);
+        return Result.success("登录成功",jwt);
     }
 
     @DeleteMapping("/{id}")
