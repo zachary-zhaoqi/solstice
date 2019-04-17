@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 public class UserOutputDTO {
+
+    private Integer id;
+
     private String userAccount;
 
     private String userEmail;
@@ -16,8 +19,6 @@ public class UserOutputDTO {
     private String userPhone;
 
     private String userAuthority;
-
-    private Integer userId;
 
     private String userName;
 
