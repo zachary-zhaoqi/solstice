@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.result.ActionResult;
+import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.user.dto.UserInputDTO;
 import pers.zhaoqi.solstice.user.dto.UserOutputDTO;
 import pers.zhaoqi.solstice.user.entity.UserLogin;
@@ -53,15 +56,17 @@ public class UserLoginController {
     }
 
     private UserOutputDTO creatSessionForAccount(UserInputDTO userInputDTO) {
+        ActionResult actionResult=Result.failed(ConstantMessage.FAIL_CODE);
         UserLogin userLogin = new UserLogin();
         BeanUtils.copyProperties(userInputDTO,userLogin);
         QueryWrapper queryWrapper=new QueryWrapper(userLogin);
-        queryWrapper.select("id","user_account","user_password","user_email","user_phone","user_authority","is_remove","version","`create`","create_name","create_time","modify","modify_name","modify_time");//XXX:回头修正为排除password
+        queryWrapper.select("id","user_account","user_email","user_phone","user_authority","is_remove","version","`create`","create_name","create_time","modify","modify_name","modify_time");//XXX:回头修正为排除password
         userLogin=service.getOne(queryWrapper);
         UserOutputDTO userOutputDTO = new UserOutputDTO();
         if ( null != userLogin ) {
             BeanUtils.copyProperties(userLogin,userOutputDTO);
         }
+
         return userOutputDTO;
     }
 
