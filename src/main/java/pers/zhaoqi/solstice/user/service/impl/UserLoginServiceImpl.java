@@ -28,7 +28,7 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin
     private IUserInfoService userInfoService;
 
     @Override
-    public String creatSessionForAccount(UserInputDTO userInputDTO) throws Exception {
+    public String creatTokenForAccount(UserInputDTO userInputDTO) throws Exception {
         UserLogin userLogin = new UserLogin();
         BeanUtils.copyProperties(userInputDTO, userLogin);
         QueryWrapper queryWrapper = new QueryWrapper(userLogin);
@@ -43,17 +43,17 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin
 
 
 
-        return JWTUntil.createJWT(userOutputDTO,36000L);
+        return JWTUntil.createJWT(userOutputDTO,360000000L);
     }
 
 
     @Override
-    public String creatSessionForPhone(UserInputDTO userInputDTO) {
+    public String creatTokenForPhone(UserInputDTO userInputDTO) {
         return null;
     }
 
     @Override
-    public String creatSessionForEmail(UserInputDTO userInputDTO) {
+    public String creatTokenForEmail(UserInputDTO userInputDTO) {
         return null;
     }
 }

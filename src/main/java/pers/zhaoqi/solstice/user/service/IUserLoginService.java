@@ -17,9 +17,9 @@ public interface IUserLoginService extends IService<UserLogin> {
      * 通过账户密码进行创建session登录
      *
      * @return*/
-    String creatSessionForAccount(UserInputDTO userInputDTO) throws Exception;
+    String creatTokenForAccount(UserInputDTO userInputDTO) throws Exception;
 
-    String creatSessionForPhone(UserInputDTO userInputDTO);
+    String creatTokenForPhone(UserInputDTO userInputDTO);
 
-    String creatSessionForEmail(UserInputDTO userInputDTO);
+    String creatTokenForEmail(UserInputDTO userInputDTO);
 }
