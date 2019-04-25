@@ -1,9 +1,8 @@
-package pers.zhaoqi.solstice.user.service.impl;
+package pers.zhaoqi.solstice.userinfo.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import pers.zhaoqi.solstice.user.entity.UserInfo;
-import pers.zhaoqi.solstice.user.mapper.UserInfoMapper;
-import pers.zhaoqi.solstice.user.service.IUserInfoService;
+import pers.zhaoqi.solstice.userinfo.entity.UserInfo;
+import pers.zhaoqi.solstice.userinfo.mapper.UserInfoMapper;
+import pers.zhaoqi.solstice.userinfo.service.IUserInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package pers.zhaoqi.solstice.user.entity;
+package pers.zhaoqi.solstice.userlogin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import pers.zhaoqi.solstice.common.entity.BaseEntity;

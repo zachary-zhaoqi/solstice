@@ -2,8 +2,7 @@ package pers.zhaoqi.solstice.common.until;
 
 import io.jsonwebtoken.Claims;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
+import pers.zhaoqi.solstice.userlogin.jwt.JWTUntil;
 
 public class JWTUntilTest {
 

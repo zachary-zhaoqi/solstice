@@ -1,4 +1,4 @@
-package pers.zhaoqi.solstice.user.entity;
+package pers.zhaoqi.solstice.userinfo.entity;
 
 import pers.zhaoqi.solstice.common.entity.BaseEntity;
 

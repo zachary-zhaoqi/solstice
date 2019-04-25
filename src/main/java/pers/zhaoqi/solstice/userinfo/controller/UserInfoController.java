@@ -1,4 +1,4 @@
-package pers.zhaoqi.solstice.user.controller;
+package pers.zhaoqi.solstice.userinfo.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-04-14
  */
 @RestController
-@RequestMapping("/user/userInfo")
+@RequestMapping("/userinfo/userInfo")
 public class UserInfoController {
 
 }

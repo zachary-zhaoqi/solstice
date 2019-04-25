@@ -1,6 +1,6 @@
-package pers.zhaoqi.solstice.user.mapper;
+package pers.zhaoqi.solstice.userinfo.mapper;
 
-import pers.zhaoqi.solstice.user.entity.UserInfo;
+import pers.zhaoqi.solstice.userinfo.entity.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

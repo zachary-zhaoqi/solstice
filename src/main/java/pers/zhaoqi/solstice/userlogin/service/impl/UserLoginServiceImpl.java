@@ -1,15 +1,15 @@
-package pers.zhaoqi.solstice.user.service.impl;
+package pers.zhaoqi.solstice.userlogin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import pers.zhaoqi.solstice.common.until.JWTUntil;
-import pers.zhaoqi.solstice.user.dto.UserInputDTO;
-import pers.zhaoqi.solstice.user.dto.UserOutputDTO;
-import pers.zhaoqi.solstice.user.entity.UserLogin;
-import pers.zhaoqi.solstice.user.mapper.UserLoginMapper;
-import pers.zhaoqi.solstice.user.service.IUserInfoService;
-import pers.zhaoqi.solstice.user.service.IUserLoginService;
+import pers.zhaoqi.solstice.userlogin.jwt.JWTUntil;
+import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
+import pers.zhaoqi.solstice.userlogin.dto.UserLoginOutputDTO;
+import pers.zhaoqi.solstice.userlogin.entity.UserLogin;
+import pers.zhaoqi.solstice.userlogin.mapper.UserLoginMapper;
+import pers.zhaoqi.solstice.userinfo.service.IUserInfoService;
+import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -28,32 +28,32 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin
     private IUserInfoService userInfoService;
 
     @Override
-    public String creatTokenForAccount(UserInputDTO userInputDTO) throws Exception {
+    public String creatTokenForAccount(UserLoginInputDTO userLoginInputDTO) throws Exception {
         UserLogin userLogin = new UserLogin();
-        BeanUtils.copyProperties(userInputDTO, userLogin);
+        BeanUtils.copyProperties(userLoginInputDTO, userLogin);
         QueryWrapper queryWrapper = new QueryWrapper(userLogin);
 //        queryWrapper.select("id", "user_account", "user_email", "user_phone", "user_authority", "is_remove", "version", "`create`", "create_name", "create_time", "modify", "modify_name", "modify_time");//已使用@TableField(select=false)
         userLogin = getOne(queryWrapper);
         if (null == userLogin) {
             return null;
         }
-        UserOutputDTO userOutputDTO = new UserOutputDTO();
-        BeanUtils.copyProperties(userLogin, userOutputDTO);
-//        BeanUtils.copyProperties(userInfoService.getById(userLogin.getId()),userOutputDTO);
+        UserLoginOutputDTO userLoginOutputDTO = new UserLoginOutputDTO();
+        BeanUtils.copyProperties(userLogin, userLoginOutputDTO);
+//        BeanUtils.copyProperties(userInfoService.getById(userLogin.getId()),userLoginOutputDTO);
 
 
 
-        return JWTUntil.createJWT(userOutputDTO,360000000L);
+        return JWTUntil.createJWT(userLoginOutputDTO,360000000L);
     }
 
 
     @Override
-    public String creatTokenForPhone(UserInputDTO userInputDTO) {
+    public String creatTokenForPhone(UserLoginInputDTO userLoginInputDTO) {
         return null;
     }
 
     @Override
-    public String creatTokenForEmail(UserInputDTO userInputDTO) {
+    public String creatTokenForEmail(UserLoginInputDTO userLoginInputDTO) {
         return null;
     }
 }

@@ -1,6 +1,6 @@
-package pers.zhaoqi.solstice.user.service;
+package pers.zhaoqi.solstice.userinfo.service;
 
-import pers.zhaoqi.solstice.user.entity.UserInfo;
+import pers.zhaoqi.solstice.userinfo.entity.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
