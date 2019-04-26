@@ -1,18 +1,23 @@
 package pers.zhaoqi.solstice.userlogin.controller;
 
 
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import pers.zhaoqi.solstice.common.enums.ConstantMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
+import pers.zhaoqi.solstice.userlogin.check.CheckLoginAspect;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
+import pers.zhaoqi.solstice.userlogin.jwt.JWTUntil;
 import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -23,7 +28,7 @@ import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
  * @since 2019-04-26
  */
 @RestController
-@RequestMapping("/userlogin/userLogin")
+@RequestMapping("/userlogin/session")
 public class UserLoginController {
     @Autowired
     private IUserLoginService service;
@@ -52,5 +57,27 @@ public class UserLoginController {
             return Result.failed(ConstantMessage.FAIL_CODE,"账户或密码错误");
         }
         return Result.success("登录成功",jwt);
+    }
+
+    @ApiOperation(value = "检查令牌", notes = "检查令牌")
+    @GetMapping("/")
+    public ActionResult checkToken(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Cookie[] cookies=request.getCookies();
+        String token="";
+        if (cookies!=null){
+            for(Cookie cookie:cookies){
+                if ("token".equals(cookie.getName())){
+                    token=cookie.getValue();
+                }
+            }
+        }
+
+        try {
+            Claims claims = JWTUntil.parseJWT(token);
+            return Result.success("验证成功");
+        } catch (Exception e) {
+            return Result.failed(ConstantMessage.LOGIN_ERROR,"登录信息错误,请重新登录");
+        }
     }
 }
