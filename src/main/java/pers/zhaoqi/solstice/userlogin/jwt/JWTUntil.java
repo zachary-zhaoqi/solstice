@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class JWTUntil {
 
-    public static final long JWT_EXPIRES = 60*60*1000L;//秘钥过期时间60分钟
+    public static final long JWT_EXPIRES = 5*60*60*1000L;//秘钥过期时间60分钟
 
     /**
      * 由字符串生成加密key

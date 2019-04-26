@@ -1,12 +1,12 @@
 package pers.zhaoqi.solstice.userlogin.entity;
 
-import com.baomidou.mybatisplus.annotation.Version;
-import pers.zhaoqi.solstice.common.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import pers.zhaoqi.solstice.common.entity.BaseEntity;
 
 /**
  * <p>
@@ -27,6 +27,7 @@ public class UserLogin extends BaseEntity {
     @ApiModelProperty(value = "用户账号")
     private String userAccount;
 
+    @TableField(select=false)
     @ApiModelProperty(value = "用户密码")
     private String userPassword;
 
@@ -36,8 +37,7 @@ public class UserLogin extends BaseEntity {
     @ApiModelProperty(value = "用户账户关联手机号")
     private String userPhone;
 
-    @ApiModelProperty(value = "用户身份权限表
-关联数据字典")
+    @ApiModelProperty(value = "用户身份权限表 关联数据字典")
     private String userAuthority;
 
 

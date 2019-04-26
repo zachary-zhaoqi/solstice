@@ -1,12 +1,14 @@
 package pers.zhaoqi.solstice.userinfo.controller;
 
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
-import pers.zhaoqi.solstice.userlogin.entity.UserLogin;
+import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.result.ActionResult;
+import pers.zhaoqi.solstice.common.result.Result;
+import pers.zhaoqi.solstice.userinfo.entity.UserInfo;
+import pers.zhaoqi.solstice.userinfo.service.IUserInfoService;
 
 /**
  * <p>
@@ -20,9 +22,17 @@ import pers.zhaoqi.solstice.userlogin.entity.UserLogin;
 @RequestMapping("/userinfo/userInfo")
 public class UserInfoController {
 
-    @DeleteMapping("/{id}")
-    public UserLogin deleteUserLogin(@PathVariable("id") Integer id) {
-        return null;
+    @Autowired
+    private IUserInfoService userInfoService;
+
+    @GetMapping("/{id}")
+    public ActionResult selectOnt(@PathVariable("id") Integer id){
+        UserInfo userInfo = userInfoService.getById(id);
+        if (userInfo==null){
+            return Result.failed(ConstantMessage.ID_ERROR,"查询失败");
+        }else {
+            return Result.success("查询成功",userInfo);
+        }
     }
 
 }
