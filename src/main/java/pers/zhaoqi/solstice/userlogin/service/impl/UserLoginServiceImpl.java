@@ -2,8 +2,9 @@ package pers.zhaoqi.solstice.userlogin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import pers.zhaoqi.solstice.userinfo.service.IUserInfoService;
+import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.result.ActionResult;
+import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginOutputDTO;
 import pers.zhaoqi.solstice.userlogin.entity.UserLogin;
@@ -25,28 +26,32 @@ import org.springframework.stereotype.Service;
 public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin> implements IUserLoginService {
 
     @Override
-    public String creatTokenForAccount(UserLoginInputDTO userLoginInputDTO) throws Exception {
+    public ActionResult creatTokenForAccount(UserLoginInputDTO userLoginInputDTO) throws Exception {
         UserLogin userLogin = new UserLogin();
         BeanUtils.copyProperties(userLoginInputDTO, userLogin);
         QueryWrapper queryWrapper = new QueryWrapper(userLogin);
         userLogin = getOne(queryWrapper);
-        if (null == userLogin) {
-            return null;
-        }
-        UserLoginOutputDTO userLoginOutputDTO = new UserLoginOutputDTO();
-        BeanUtils.copyProperties(userLogin, userLoginOutputDTO);
 
-        return JWTUntil.createJWT(userLoginOutputDTO, JWTUntil.JWT_EXPIRES);
+        UserLoginOutputDTO userLoginOutputDTO = new UserLoginOutputDTO();
+        userLoginOutputDTO.setType(userLoginInputDTO.getType());
+        if (null == userLogin) {
+            userLoginOutputDTO.setUserAuthority("guest");//设置身份为游客
+            return Result.failed(ConstantMessage.LOGIN_ERROR,userLoginOutputDTO);
+        }else {
+            BeanUtils.copyProperties(userLogin, userLoginOutputDTO);
+            userLoginOutputDTO.setJwt(JWTUntil.createJWT(null,JWTUntil.JWT_EXPIRES));
+            return Result.success("登录成功",userLoginOutputDTO);
+        }
     }
 
 
     @Override
-    public String creatTokenForPhone(UserLoginInputDTO userLoginInputDTO) {
+    public ActionResult creatTokenForPhone(UserLoginInputDTO userLoginInputDTO) {
         return null;
     }
 
     @Override
-    public String creatTokenForEmail(UserLoginInputDTO userLoginInputDTO) {
+    public ActionResult creatTokenForEmail(UserLoginInputDTO userLoginInputDTO) {
         return null;
     }
 }

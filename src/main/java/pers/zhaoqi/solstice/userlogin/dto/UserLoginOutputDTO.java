@@ -26,4 +26,8 @@ public class UserLoginOutputDTO {
     private LocalDateTime userBirthday;
 
     private String userChatHead;
+
+    private String type;
+
+    private String jwt;
 }

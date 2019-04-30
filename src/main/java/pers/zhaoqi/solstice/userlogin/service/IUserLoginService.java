@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.userlogin.service;
 
+import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
 import pers.zhaoqi.solstice.userlogin.entity.UserLogin;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,9 +19,9 @@ public interface IUserLoginService extends IService<UserLogin> {
      * 通过账户密码进行创建session登录
      *
      * @return*/
-    String creatTokenForAccount(UserLoginInputDTO userLoginInputDTO) throws Exception;
+    ActionResult creatTokenForAccount(UserLoginInputDTO userLoginInputDTO) throws Exception;
 
-    String creatTokenForPhone(UserLoginInputDTO userLoginInputDTO);
+    ActionResult creatTokenForPhone(UserLoginInputDTO userLoginInputDTO);
 
-    String creatTokenForEmail(UserLoginInputDTO userLoginInputDTO);
+    ActionResult creatTokenForEmail(UserLoginInputDTO userLoginInputDTO);
 }

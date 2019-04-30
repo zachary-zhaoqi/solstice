@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UserLoginInputDTO {
+    private String type;
+
     private String userAccount;
 
     private String userPassword;
