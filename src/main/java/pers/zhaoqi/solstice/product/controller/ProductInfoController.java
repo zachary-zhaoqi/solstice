@@ -1,9 +1,12 @@
 package pers.zhaoqi.solstice.product.controller;
 
 
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+import pers.zhaoqi.solstice.common.result.ActionResult;
+import pers.zhaoqi.solstice.product.entity.ProductInfo;
 
 /**
  * <p>
@@ -17,4 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/product/productInfo")
 public class ProductInfoController {
 
+    @PostMapping()
+    public ActionResult AddProductInfo(ProductInfo productInfo){
+        return null;
+    }
 }
