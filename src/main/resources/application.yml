@@ -26,4 +26,5 @@ logging:
         zhaoqi:
           solstice:
             userlogin:
+            dictionary:
               mapper: DEBUG
