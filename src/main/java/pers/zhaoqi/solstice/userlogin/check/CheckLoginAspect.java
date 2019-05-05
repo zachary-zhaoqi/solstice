@@ -37,10 +37,10 @@ public class CheckLoginAspect {
 
         try {
             Claims claims = JWTUntil.parseJWT(token);
-            return joinPoint.proceed();
         } catch (Exception e) {
-            return Result.failed(ConstantMessage.LOGIN_ERROR,"登录信息错误");
+            return Result.failed(ConstantMessage.LOGIN_ERROR,e.getMessage());
         }
+        return joinPoint.proceed();
     }
 
 }

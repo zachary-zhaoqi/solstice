@@ -37,6 +37,7 @@ public class BaseEntity implements Serializable {
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "修改人ID")
+    @TableField("`modify`")
     private Integer modify;
 
     @ApiModelProperty(value = "修改人名称")

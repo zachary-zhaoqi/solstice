@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.dictionary.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,9 +28,11 @@ public class DataDictionary extends BaseEntity {
     private Integer parentId;
 
     @ApiModelProperty(value = "键")
+    @TableField("`key`")
     private String key;
 
     @ApiModelProperty(value = "值")
+    @TableField("`value`")
     private String value;
 
     @ApiModelProperty(value = "显示-简体中文")
