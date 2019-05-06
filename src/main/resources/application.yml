@@ -4,8 +4,8 @@ server:
 
 spring:
   datasource:
-    username: zhaoqi
-    password: zq304918243
+    username: chenliang
+    password: chenliang0505
     url: jdbc:mysql://zhaoqi.cc:3306/solstice?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 
