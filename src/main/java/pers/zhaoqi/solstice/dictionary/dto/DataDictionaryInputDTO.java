@@ -7,4 +7,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class DataDictionaryInputDTO {
     private String key;
+    private boolean isTree;
 }
