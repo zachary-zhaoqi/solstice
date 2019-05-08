@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JWTUntil {
+public class JWTUtils {
 
     public static final long JWT_EXPIRES = 72*5*60*60*1000L;//秘钥过期时间60分钟*72
 

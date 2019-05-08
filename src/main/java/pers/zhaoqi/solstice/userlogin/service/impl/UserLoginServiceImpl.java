@@ -8,7 +8,7 @@ import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginOutputDTO;
 import pers.zhaoqi.solstice.userlogin.entity.UserLogin;
-import pers.zhaoqi.solstice.userlogin.jwt.JWTUntil;
+import pers.zhaoqi.solstice.userlogin.jwt.JWTUtils;
 import pers.zhaoqi.solstice.userlogin.mapper.UserLoginMapper;
 import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -39,7 +39,7 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin
             return Result.failed(ConstantMessage.LOGIN_ERROR,userLoginOutputDTO);
         }else {
             BeanUtils.copyProperties(userLogin, userLoginOutputDTO);
-            userLoginOutputDTO.setJwt(JWTUntil.createJWT(userLogin.getId(),null,JWTUntil.JWT_EXPIRES));
+            userLoginOutputDTO.setJwt(JWTUtils.createJWT(userLogin.getId(),null, JWTUtils.JWT_EXPIRES));
             return Result.success("登录成功",userLoginOutputDTO);
         }
     }

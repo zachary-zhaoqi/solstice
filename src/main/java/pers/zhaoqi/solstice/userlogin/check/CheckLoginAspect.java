@@ -10,7 +10,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import pers.zhaoqi.solstice.common.enums.ConstantMessage;
 import pers.zhaoqi.solstice.common.result.Result;
-import pers.zhaoqi.solstice.userlogin.jwt.JWTUntil;
+import pers.zhaoqi.solstice.common.utils.Utils;
+import pers.zhaoqi.solstice.userlogin.jwt.JWTUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,27 +21,22 @@ import javax.servlet.http.HttpServletRequest;
 public class CheckLoginAspect {
 
     @Pointcut("within(pers.zhaoqi.solstice.*.controller..*)&&!within(pers.zhaoqi.solstice.userlogin.controller..*)")
-    public void checkLogin(){}
+    public void checkLogin() {
+    }
 
     @Around("checkLogin()")
     public Object check(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Cookie[] cookies=request.getCookies();
-        String token="";
-        if (cookies!=null){
-            for(Cookie cookie:cookies){
-                if ("token".equals(cookie.getName())){
-                    token=cookie.getValue();
-                }
-            }
-        }
+        Cookie[] cookies = request.getCookies();
+        String token = Utils.getTokenForCookies(cookies);
 
         try {
-            Claims claims = JWTUntil.parseJWT(token);
+            Claims claims = JWTUtils.parseJWT(token);
         } catch (Exception e) {
-            return Result.failed(ConstantMessage.LOGIN_ERROR,e.getMessage());
+            return Result.failed(ConstantMessage.LOGIN_ERROR, e.getMessage());
         }
         return joinPoint.proceed();
     }
+
 
 }

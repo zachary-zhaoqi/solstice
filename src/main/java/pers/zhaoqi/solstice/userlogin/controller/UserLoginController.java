@@ -11,10 +11,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import pers.zhaoqi.solstice.common.enums.ConstantMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
-import pers.zhaoqi.solstice.userlogin.check.CheckLoginAspect;
+import pers.zhaoqi.solstice.common.utils.Utils;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
-import pers.zhaoqi.solstice.userlogin.dto.UserLoginOutputDTO;
-import pers.zhaoqi.solstice.userlogin.jwt.JWTUntil;
+import pers.zhaoqi.solstice.userlogin.jwt.JWTUtils;
 import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
 
 import javax.servlet.http.Cookie;
@@ -64,17 +63,10 @@ public class UserLoginController {
     public ActionResult checkToken() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Cookie[] cookies = request.getCookies();
-        String token = "";
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                }
-            }
-        }
+        String token = Utils.getTokenForCookies(cookies);
 
         try {
-            Claims claims = JWTUntil.parseJWT(token);
+            Claims claims = JWTUtils.parseJWT(token);
             return Result.success("验证成功");
         } catch (Exception e) {
             return Result.failed(ConstantMessage.LOGIN_ERROR, "登录信息错误,请重新登录");

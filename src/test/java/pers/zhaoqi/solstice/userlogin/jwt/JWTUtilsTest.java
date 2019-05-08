@@ -3,9 +3,7 @@ package pers.zhaoqi.solstice.userlogin.jwt;
 import io.jsonwebtoken.Claims;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class JWTUntilTest {
+public class JWTUtilsTest {
 
     @Test
     public void createJWT() {
@@ -20,7 +18,7 @@ public class JWTUntilTest {
                 ".V4iiSlzM41K5lC58sNWIdj7qPaBsc1Hmiff1yvBhSds";
 
         try {
-            Claims claims = JWTUntil.parseJWT(jwt);
+            Claims claims = JWTUtils.parseJWT(jwt);
             System.out.println("aaa");
         } catch (Exception e) {
             e.printStackTrace();
