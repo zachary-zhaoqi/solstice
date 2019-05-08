@@ -34,12 +34,12 @@ public class UserLoginController {
     private IUserLoginService service;
 
     @ApiOperation(value = "新建会话", notes = "新建会话")
-    @PostMapping("/")
+    @PostMapping()
     public ActionResult creatToken(@RequestBody UserLoginInputDTO userLoginInputDTO) {
         if (userLoginInputDTO.getUserPassword() == null) {
             return Result.failed(ConstantMessage.WANT_CORRECT_INPUT, "请输入密码");
         }
-//todo 修改为通过inputDTO中的type来进行判断。
+        //todo 修改为通过inputDTO中的type来进行判断。
         ActionResult result = null;
         try {
             if (userLoginInputDTO.getUserAccount() != null) {
@@ -59,7 +59,7 @@ public class UserLoginController {
     }
 
     @ApiOperation(value = "检查令牌", notes = "检查令牌")
-    @GetMapping("/")
+    @GetMapping()
     public ActionResult checkToken() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Cookie[] cookies = request.getCookies();
