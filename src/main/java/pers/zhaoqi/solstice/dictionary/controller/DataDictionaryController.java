@@ -45,35 +45,37 @@ public class DataDictionaryController {
         DataDictionary dataDictionary = new DataDictionary();
         BeanUtils.copyProperties(dataDictionaryInputDTO, dataDictionary);
         QueryWrapper queryWrapper = new QueryWrapper(dataDictionary);
-        List list = null;
-        DataDictionary one;
+        List<DataDictionary> list = null;
         try {
-//            list = dataDictionaryService.listObjs(queryWrapper);
-            one = dataDictionaryService.getOne(queryWrapper);
+            list = dataDictionaryService.listObjs(queryWrapper);
         } catch (Exception e) {
             logger.debug(e.getMessage());
             return Result.failed(-500, "QueryDataDictionary查询出错；");
         }
-
-        return Result.success("查询成功", one);
+        if (dataDictionaryInputDTO.isTree()) {
+            return Result.success("查询成功", CreatTree(list));
+        } else {
+            return Result.success("查询成功", list);
+        }
     }
 
     /**
      * 根据传入的list生成一个tree
      * todo
-     * @author 陈亮
+     *
      * @param dataDictionaryList
      * @return tree
      * @throws NullPointerException
+     * @author 陈亮
      */
     public List CreatTree(List<DataDictionary> dataDictionaryList) throws NullPointerException {
         if (dataDictionaryList == null || dataDictionaryList.size() == 0) {
             throw new NullPointerException("dataDictionaryList为空！");
         } else {
             List<DataDictionary> tree = new ArrayList<DataDictionary>();
-            for (DataDictionary dataDictionary:
-                 dataDictionaryList) {
-                if (dataDictionary.getParentId()==null){
+            for (DataDictionary dataDictionary :
+                    dataDictionaryList) {
+                if (dataDictionary.getParentId() == null) {
                     tree.add(dataDictionary);
                 }
             }
