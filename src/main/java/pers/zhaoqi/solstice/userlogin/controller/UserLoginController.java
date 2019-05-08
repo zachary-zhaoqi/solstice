@@ -39,7 +39,7 @@ public class UserLoginController {
         if (userLoginInputDTO.getUserPassword() == null) {
             return Result.failed(ConstantMessage.WANT_CORRECT_INPUT, "请输入密码");
         }
-//XXX 修改为通过inputDTO中的type来进行判断。
+//todo 修改为通过inputDTO中的type来进行判断。
         ActionResult result = null;
         try {
             if (userLoginInputDTO.getUserAccount() != null) {
