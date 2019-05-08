@@ -40,6 +40,7 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin
         }else {
             BeanUtils.copyProperties(userLogin, userLoginOutputDTO);
             userLoginOutputDTO.setJwt(JWTUtils.createJWT(userLogin.getId(),null, JWTUtils.JWT_EXPIRES));
+            userLoginOutputDTO.setJwtExpires(JWTUtils.JWT_EXPIRES);
             return Result.success("登录成功",userLoginOutputDTO);
         }
     }

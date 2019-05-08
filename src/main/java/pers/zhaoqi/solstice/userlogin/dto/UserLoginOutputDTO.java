@@ -30,4 +30,6 @@ public class UserLoginOutputDTO {
     private String type;
 
     private String jwt;
+
+    private Long jwtExpires;
 }
