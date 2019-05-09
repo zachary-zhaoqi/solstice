@@ -20,6 +20,8 @@ public class DataDictionaryTreeDTO {
 
     private Integer value;
 
+    private Integer key;
+
     public DataDictionary dataDictionary;
 
     private List<DataDictionaryTreeDTO> children;

@@ -1,7 +1,7 @@
 package pers.zhaoqi.solstice.product.controller;
 
 
-import org.apache.logging.log4j.message.ReusableMessage;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +29,8 @@ import pers.zhaoqi.solstice.product.service.IProductInfoService;
 @RequestMapping("/product/productInfo")
 public class ProductInfoController {
 
+    public static final String MESSAGE_HEAD = "[产品]";
+
     @Autowired
     private IProductInfoService productInfoService;
     @Autowired
@@ -38,22 +40,30 @@ public class ProductInfoController {
 
 
     @PostMapping("/{name}")
-    public ActionResult AddProductInfo(@RequestBody ProductInfo productInfo) {
+    public ActionResult SaveProduct(@RequestBody ProductInfo productInfo) {
+        QueryWrapper queryWrapper = new QueryWrapper(new ProductInfo().setName(productInfo.getName()));
+        if (productInfoService.count(queryWrapper) > 0) {
+            return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_ENTITY_REPEAT+"产品名称");
+        }
+
         Utils.FillCreate(productInfo);
-        productInfo.setBrandName(brandInfoService.getById(productInfo.getBrandId()).getName());
-        productInfo.setCategoryName(dataDictionaryService.getById(productInfo.getCategorySn()).getLabelZhCn());
+        if (productInfo.getBrandId()!=null)
+            productInfo.setBrandName(brandInfoService.getById(productInfo.getBrandId()).getName());
+        if (productInfo.getCategorySn()!=null)
+            productInfo.setCategoryName(dataDictionaryService.getById(productInfo.getCategorySn()).getLabelZhCn());
         productInfo.setBarCode(GeneratesUniqueCode());
 
         if (productInfoService.save(productInfo)) {
-            return Result.success("添加商品成功");
-        }else {
-            return Result.failed(ResultCodeAndMessage.FAIL_SAVA,ResultCodeAndMessage.FAIL_SAVA_MESSAGE);
+            return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_SAVA_MESSAGE);
+        } else {
+            return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_SAVA_MESSAGE);
         }
     }
 
     /**
      * 生成唯一的编码
      * 格式:年月日时分秒+六位哈希码
+     *
      * @return
      */
     private String GeneratesUniqueCode() {

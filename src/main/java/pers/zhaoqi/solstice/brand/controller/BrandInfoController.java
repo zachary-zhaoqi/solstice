@@ -27,17 +27,19 @@ import java.util.List;
 @RequestMapping("/brand/brandInfo")
 public class BrandInfoController {
 
+    public static final String MESSAGE_HEAD = "brand"+":";
+
     @Autowired
     IBrandInfoService brandInfoService;
 
     @GetMapping
-    public ActionResult getBrand(BrandInfo brandInfo){
-        QueryWrapper queryWrapper=new QueryWrapper(brandInfo);
+    public ActionResult QueryBrand(BrandInfo brandInfo) {
+        QueryWrapper queryWrapper = new QueryWrapper(brandInfo);
         List list = brandInfoService.list(queryWrapper);
-        if (list==null||list.size()==0){
-            return Result.failed(ResultCodeAndMessage.FAIL_CODE,"不存在该品牌;");
-        }else {
-            return Result.success("查询成功",list);
+        if (list == null || list.size() == 0) {
+            return Result.failed(ResultCodeAndMessage.FAIL_QUERY, MESSAGE_HEAD +ResultCodeAndMessage.FAIL_QUERY_MESSAGE);
+        } else {
+            return Result.success(MESSAGE_HEAD +ResultCodeAndMessage.SUCCESS_QUERY_MESSAGE, list);
         }
     }
 

@@ -1,4 +1,3 @@
-
 server:
   port: 8080
 
@@ -22,12 +21,26 @@ mybatis-plus:
 
 logging:
   level:
-      pers:
-        zhaoqi:
-          solstice:
-            dictionary:
-              mapper: DEBUG
-            brand:
-              mapper: DEBUG
-            userlogin:
-              mapper: DEBUG
+    pers:
+      zhaoqi:
+        solstice:
+#          brand:
+#            mapper: DEBUG
+#          dictionary:
+#            mapper: DEBUG
+#          inventory:
+#            mapper: DEBUG
+#          log:
+#            mapper: DEBUG
+#          order:
+#            mapper: DEBUG
+          product:
+            mapper: DEBUG
+#          shippingaddress:
+#            mapper: DEBUG
+#          trolley:
+#            mapper: DEBUG
+#          userinfo:
+#            mapper: DEBUG
+#          userlogin:
+#            mapper: DEBUG

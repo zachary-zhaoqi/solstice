@@ -55,6 +55,8 @@ public class Utils {
             baseEntity.setCreate(userInfo.getUserId());
             baseEntity.setCreateName(userInfo.getUserName());
             baseEntity.setCreateTime(LocalDateTime.now());
+            baseEntity.setIsRemove(0);
+            baseEntity.setVersion(0);
         } catch (Exception e) {
             e.printStackTrace();
         }

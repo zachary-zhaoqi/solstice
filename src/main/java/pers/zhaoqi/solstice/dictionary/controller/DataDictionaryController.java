@@ -75,6 +75,7 @@ public class DataDictionaryController {
                     dataDictionaryTreeDTO.setDataDictionary(dataDictionary);
                     dataDictionaryTreeDTO.setTitle(dataDictionary.getLabelZhCn());
                     dataDictionaryTreeDTO.setValue(dataDictionary.getId());
+                    dataDictionaryTreeDTO.setKey(dataDictionary.getId());
                     dataDictionaryTreeDTO.setChildren(getchlidren(dataDictionary.getId(),dataDictionaryList));
                     tree.add(dataDictionaryTreeDTO);
                 }
@@ -99,6 +100,7 @@ public class DataDictionaryController {
                 dataDictionaryTreeDTO.setDataDictionary(dataDictionary);
                 dataDictionaryTreeDTO.setTitle(dataDictionary.getLabelZhCn());
                 dataDictionaryTreeDTO.setValue(dataDictionary.getId());
+                dataDictionaryTreeDTO.setKey(dataDictionary.getId());
                 dataDictionaryTreeDTO.setChildren(getchlidren(dataDictionary.getId(),dataDictionaryList));
                 children.add(dataDictionaryTreeDTO);
             }
