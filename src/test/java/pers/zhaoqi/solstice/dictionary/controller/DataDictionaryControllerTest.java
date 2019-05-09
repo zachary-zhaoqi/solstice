@@ -25,14 +25,14 @@ public class DataDictionaryControllerTest {
     public void creatTree() {
         List<DataDictionary> dataDictionaryList = new ArrayList<DataDictionary>();
         DataDictionary dataDictionary = new DataDictionary();
-        Random r = new Random();
+        Random r = new Random(1000);
         for (Integer i = 1;i<10;i++)
         {
             dataDictionary.setLabelZhCn("LabelZhCn" + i);
             dataDictionary.setValue("Value" + i);
             dataDictionary.setId(i);
             Integer parentid = r.nextInt(i)-1;
-            if (parentid == 0) {
+            if (parentid <= 0) {
                 dataDictionary.setParentId(null);
             }else {
                 dataDictionary.setParentId(parentid);
@@ -40,7 +40,7 @@ public class DataDictionaryControllerTest {
             dataDictionaryList.add(dataDictionary);
         }
         DataDictionaryController dataDictionaryController=new DataDictionaryController();
-        dataDictionaryController.CreatTree(dataDictionaryList);
+        dataDictionaryController.convertTree(dataDictionaryList);
         System.out.println("测试完成");
     }
 }
