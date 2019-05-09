@@ -71,10 +71,11 @@ public class DataDictionaryController {
         if (dataDictionaryList == null || dataDictionaryList.size() == 0) {
             throw new NullPointerException("dataDictionaryList为空！");
         } else {
-            DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
+            //DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
             List<DataDictionaryTreeDTO> tree = new ArrayList<DataDictionaryTreeDTO>();
             for (DataDictionary dataDictionary :
                     dataDictionaryList) {
+                DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
                 if (dataDictionary.getParentId() == null) {
                     dataDictionaryTreeDTO.setDataDictionary(dataDictionary);
                     dataDictionaryTreeDTO.setTitle(dataDictionary.getLabelZhCn());
@@ -90,11 +91,11 @@ public class DataDictionaryController {
     }
 
     public List getchlidren(Integer parentId,List<DataDictionary> dataDictionaryList){
-        DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
         List<DataDictionaryTreeDTO> children =  new ArrayList<DataDictionaryTreeDTO>();
         for (DataDictionary dataDictionary :
                 dataDictionaryList) {
             if (dataDictionary.getParentId() == parentId) {
+                DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
                 dataDictionaryTreeDTO.setDataDictionary(dataDictionary);
                 dataDictionaryTreeDTO.setTitle(dataDictionary.getLabelZhCn());
                 dataDictionaryTreeDTO.setValue(dataDictionary.getValue());
