@@ -4,7 +4,7 @@ package pers.zhaoqi.solstice.userinfo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.userinfo.entity.UserInfo;
@@ -29,7 +29,7 @@ public class UserInfoController {
     public ActionResult selectOnt(@PathVariable("id") Integer id){
         UserInfo userInfo = userInfoService.getById(id);
         if (userInfo==null){
-            return Result.failed(ConstantMessage.ID_ERROR,"查询失败");
+            return Result.failed(ResultCodeAndMessage.ID_ERROR,"查询失败");
         }else {
             return Result.success("查询成功",userInfo);
         }

@@ -2,7 +2,7 @@ package pers.zhaoqi.solstice.userlogin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
-import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
@@ -36,7 +36,7 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginMapper, UserLogin
         userLoginOutputDTO.setType(userLoginInputDTO.getType());
         if (null == userLogin) {
             userLoginOutputDTO.setUserAuthority("guest");//设置身份为游客
-            return Result.failed(ConstantMessage.LOGIN_ERROR,userLoginOutputDTO);
+            return Result.failed(ResultCodeAndMessage.LOGIN_ERROR,userLoginOutputDTO);
         }else {
             BeanUtils.copyProperties(userLogin, userLoginOutputDTO);
             userLoginOutputDTO.setJwt(JWTUtils.createJWT(userLogin.getId(),null, JWTUtils.JWT_EXPIRES));

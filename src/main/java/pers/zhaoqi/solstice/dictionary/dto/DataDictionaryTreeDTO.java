@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.dictionary.dto;
 
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -17,9 +18,7 @@ public class DataDictionaryTreeDTO {
 
     private String title;
 
-    private String value;
-
-    private String key;
+    private Integer value;
 
     public DataDictionary dataDictionary;
 

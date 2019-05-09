@@ -1,23 +1,16 @@
 package pers.zhaoqi.solstice.userlogin.controller;
 
 
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.common.utils.Utils;
 import pers.zhaoqi.solstice.userlogin.dto.UserLoginInputDTO;
-import pers.zhaoqi.solstice.userlogin.jwt.JWTUtils;
 import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -37,7 +30,7 @@ public class UserLoginController {
     @PostMapping()
     public ActionResult creatToken(@RequestBody UserLoginInputDTO userLoginInputDTO) {
         if (userLoginInputDTO.getUserPassword() == null) {
-            return Result.failed(ConstantMessage.WANT_CORRECT_INPUT, "请输入密码");
+            return Result.failed(ResultCodeAndMessage.WANT_CORRECT_INPUT, "请输入密码");
         }
         //todo 修改为通过inputDTO中的type来进行判断。
         ActionResult result = null;
@@ -49,7 +42,7 @@ public class UserLoginController {
             } else if (userLoginInputDTO.getUserEmail() != null) {
                 result = service.creatTokenForEmail(userLoginInputDTO);//如果有邮箱就通过邮箱进行创建session登录
             } else {
-                return Result.failed(ConstantMessage.WANT_CORRECT_INPUT, "请输入账户/手机号/邮箱，或使用手机号验证登录");
+                return Result.failed(ResultCodeAndMessage.WANT_CORRECT_INPUT, "请输入账户/手机号/邮箱，或使用手机号验证登录");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,15 +54,11 @@ public class UserLoginController {
     @ApiOperation(value = "检查令牌", notes = "检查令牌")
     @GetMapping()
     public ActionResult checkToken() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Cookie[] cookies = request.getCookies();
-        String token = Utils.getTokenForCookies(cookies);
-
         try {
-            Claims claims = JWTUtils.parseJWT(token);
+            Utils.getClaimsForCookies();
             return Result.success("验证成功");
         } catch (Exception e) {
-            return Result.failed(ConstantMessage.LOGIN_ERROR, "登录信息错误,请重新登录");
+            return Result.failed(ResultCodeAndMessage.LOGIN_ERROR, "登录信息错误,请重新登录");
         }
     }
 }

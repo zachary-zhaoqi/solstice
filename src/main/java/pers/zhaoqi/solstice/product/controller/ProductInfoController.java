@@ -1,12 +1,21 @@
 package pers.zhaoqi.solstice.product.controller;
 
 
+import org.apache.logging.log4j.message.ReusableMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
+import pers.zhaoqi.solstice.brand.service.IBrandInfoService;
+import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
+import pers.zhaoqi.solstice.common.result.Result;
+import pers.zhaoqi.solstice.common.utils.Utils;
+import pers.zhaoqi.solstice.dictionary.service.IDataDictionaryService;
 import pers.zhaoqi.solstice.product.entity.ProductInfo;
+import pers.zhaoqi.solstice.product.service.IProductInfoService;
+
 
 /**
  * <p>
@@ -20,8 +29,36 @@ import pers.zhaoqi.solstice.product.entity.ProductInfo;
 @RequestMapping("/product/productInfo")
 public class ProductInfoController {
 
-    @PostMapping()
-    public ActionResult AddProductInfo(ProductInfo productInfo){
+    @Autowired
+    private IProductInfoService productInfoService;
+    @Autowired
+    private IDataDictionaryService dataDictionaryService;
+    @Autowired
+    private IBrandInfoService brandInfoService;
+
+
+    @PostMapping("/{name}")
+    public ActionResult AddProductInfo(@RequestBody ProductInfo productInfo) {
+        Utils.FillCreate(productInfo);
+        productInfo.setBrandName(brandInfoService.getById(productInfo.getBrandId()).getName());
+        productInfo.setCategoryName(dataDictionaryService.getById(productInfo.getCategorySn()).getLabelZhCn());
+        productInfo.setBarCode(GeneratesUniqueCode());
+
+        if (productInfoService.save(productInfo)) {
+            return Result.success("添加商品成功");
+        }else {
+            return Result.failed(ResultCodeAndMessage.FAIL_SAVA,ResultCodeAndMessage.FAIL_SAVA_MESSAGE);
+        }
+    }
+
+    /**
+     * 生成唯一的编码
+     * 格式:年月日时分秒+六位哈希码
+     * @return
+     */
+    private String GeneratesUniqueCode() {
+//        todo：陈亮
         return null;
     }
+
 }

@@ -2,7 +2,6 @@ package pers.zhaoqi.solstice.dictionary.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sun.source.tree.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -11,16 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
-import pers.zhaoqi.solstice.common.enums.ConstantMessage;
+import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
 import pers.zhaoqi.solstice.dictionary.dto.DataDictionaryInputDTO;
 import pers.zhaoqi.solstice.dictionary.dto.DataDictionaryTreeDTO;
 import pers.zhaoqi.solstice.dictionary.entity.DataDictionary;
 import pers.zhaoqi.solstice.dictionary.service.IDataDictionaryService;
-import pers.zhaoqi.solstice.userlogin.service.IUserLoginService;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +51,7 @@ public class DataDictionaryController {
             }
         } catch (Exception e) {
             logger.debug(e.getMessage());
-            return Result.failed(ConstantMessage.FAIL_CODE, "QueryDataDictionary查询出错；");
+            return Result.failed(ResultCodeAndMessage.FAIL_CODE, "QueryDataDictionary查询出错；");
         }
     }
 
@@ -70,19 +67,16 @@ public class DataDictionaryController {
         if (dataDictionaryList == null || dataDictionaryList.size() == 0) {
             throw new NullPointerException("dataDictionaryList为空！");
         } else {
-            //DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
-            List<DataDictionaryTreeDTO> tree = new ArrayList<DataDictionaryTreeDTO>();
+            List<DataDictionaryTreeDTO> tree = new ArrayList<>();
             for (DataDictionary dataDictionary :
                     dataDictionaryList) {
                 DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
                 if (dataDictionary.getParentId() == null) {
                     dataDictionaryTreeDTO.setDataDictionary(dataDictionary);
                     dataDictionaryTreeDTO.setTitle(dataDictionary.getLabelZhCn());
-                    dataDictionaryTreeDTO.setValue(dataDictionary.getValue());
-                    dataDictionaryTreeDTO.setKey(dataDictionary.getValue());
+                    dataDictionaryTreeDTO.setValue(dataDictionary.getId());
                     dataDictionaryTreeDTO.setChildren(getchlidren(dataDictionary.getId(),dataDictionaryList));
                     tree.add(dataDictionaryTreeDTO);
-                    //tree.add(dataDictionary);
                 }
             }
             return tree;
@@ -97,18 +91,16 @@ public class DataDictionaryController {
      * @author chenliang
      */
     public List getchlidren(Integer parentId,List<DataDictionary> dataDictionaryList){
-        List<DataDictionaryTreeDTO> children =  new ArrayList<DataDictionaryTreeDTO>();
+        List<DataDictionaryTreeDTO> children = new ArrayList<>();
         for (DataDictionary dataDictionary :
                 dataDictionaryList) {
             if (dataDictionary.getParentId() == parentId) {
                 DataDictionaryTreeDTO dataDictionaryTreeDTO =  new DataDictionaryTreeDTO();
                 dataDictionaryTreeDTO.setDataDictionary(dataDictionary);
                 dataDictionaryTreeDTO.setTitle(dataDictionary.getLabelZhCn());
-                dataDictionaryTreeDTO.setValue(dataDictionary.getValue());
-                dataDictionaryTreeDTO.setKey(dataDictionary.getValue());
+                dataDictionaryTreeDTO.setValue(dataDictionary.getId());
                 dataDictionaryTreeDTO.setChildren(getchlidren(dataDictionary.getId(),dataDictionaryList));
                 children.add(dataDictionaryTreeDTO);
-                //tree.add(dataDictionary);
             }
         }
         return  children;
