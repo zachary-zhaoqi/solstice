@@ -60,12 +60,11 @@ public class DataDictionaryController {
 
     /**
      * 根据传入的list转化为一个tree
-     * todo
      *
      * @param dataDictionaryList
      * @return tree
      * @throws NullPointerException
-     * @author 陈亮
+     * @author chenliang
      */
     public List convertTree(List<DataDictionary> dataDictionaryList) throws NullPointerException {
         if (dataDictionaryList == null || dataDictionaryList.size() == 0) {
@@ -90,6 +89,13 @@ public class DataDictionaryController {
         }
     }
 
+    /**
+     *
+     * @param parentId 父ID
+     * @param dataDictionaryList 全部List
+     * @return
+     * @author chenliang
+     */
     public List getchlidren(Integer parentId,List<DataDictionary> dataDictionaryList){
         List<DataDictionaryTreeDTO> children =  new ArrayList<DataDictionaryTreeDTO>();
         for (DataDictionary dataDictionary :
