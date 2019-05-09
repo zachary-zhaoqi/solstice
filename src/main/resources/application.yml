@@ -25,7 +25,9 @@ logging:
       pers:
         zhaoqi:
           solstice:
-            brand:
-            userlogin:
             dictionary:
+              mapper: DEBUG
+            brand:
+              mapper: DEBUG
+            userlogin:
               mapper: DEBUG

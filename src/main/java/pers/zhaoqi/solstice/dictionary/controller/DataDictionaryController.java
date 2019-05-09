@@ -46,7 +46,7 @@ public class DataDictionaryController {
         BeanUtils.copyProperties(dataDictionaryInputDTO, dataDictionary);
         QueryWrapper queryWrapper = new QueryWrapper(dataDictionary);
         try {
-            List<DataDictionary> list = dataDictionaryService.listObjs(queryWrapper);
+            List<DataDictionary> list = dataDictionaryService.list(queryWrapper);
             if (dataDictionaryInputDTO.isTree()) {
                 return Result.success("返回查询到的树状数据", convertTree(list));
             } else {

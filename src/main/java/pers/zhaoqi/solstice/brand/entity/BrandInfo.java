@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.brand.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,6 +25,7 @@ public class BrandInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "品牌名称")
+    @TableField("`name`")
     private String name;
 
     @ApiModelProperty(value = "品牌联系电话")
@@ -33,6 +35,7 @@ public class BrandInfo extends BaseEntity {
     private String logo;
 
     @ApiModelProperty(value = "品牌具体描述")
+    @TableField("`describe`")
     private String describe;
 
 }
