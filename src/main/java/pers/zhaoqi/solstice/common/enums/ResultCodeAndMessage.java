@@ -11,8 +11,8 @@ public class ResultCodeAndMessage {
     public static final String FAIL_SAVA_MESSAGE = "数据保存失败;";
     public static final String SUCCESS_SAVA_MESSAGE = "数据保存成功;";
     public static final Integer FAIL_QUERY = -514;
-    public static final String FAIL_QUERY_MESSAGE = "查询数据失败;";
-    public static final String SUCCESS_QUERY_MESSAGE = "数据保存成功;";
+    public static final String FAIL_QUERY_MESSAGE = "数据查询失败;";
+    public static final String SUCCESS_QUERY_MESSAGE = "数据查询成功;";
 
     public static final String FAIL_ENTITY_REPEAT = "数据发生重复;";
 }
