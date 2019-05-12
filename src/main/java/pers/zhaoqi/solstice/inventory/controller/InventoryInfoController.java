@@ -54,23 +54,25 @@ public class InventoryInfoController {
             ProductInfo productInfo = new ProductInfo();
             BeanUtils.copyProperties(inventoryInfoInputDTO, productInfo);
             QueryWrapper queryWrapper = new QueryWrapper(productInfo);
-            if (inventoryInfoInputDTO.getCreatTimeRange().size() != 0) {
-                queryWrapper.between("modifyTime", inventoryInfoInputDTO.getCreatTimeRange().get(0), inventoryInfoInputDTO.getCreatTimeRange().get(1));
-            }
             List<ProductInfo> productInfoList = productInfoService.list(queryWrapper);
             List<InventoryInfoOutputDTO> inventoryInfoOutputDTOS = new ArrayList<InventoryInfoOutputDTO>();
             if (productInfoList != null && productInfoList.size() != 0) {
                 for (ProductInfo productInfo1 : productInfoList
                 ) {
                     InventoryInfo inventoryInfo = new InventoryInfo();
-                    BeanUtils.copyProperties(productInfo1, inventoryInfo);
+                    BeanUtils.copyProperties(productInfo1,inventoryInfo);
                     QueryWrapper queryWrapper1 = new QueryWrapper(inventoryInfo);
+                    if (inventoryInfoInputDTO.getCreatTimeRange().size() != 0){
+                        queryWrapper.between("createTime",inventoryInfoInputDTO.getCreatTimeRange().get(0),inventoryInfoInputDTO.getCreatTimeRange().get(1));
+                    }
                     List<InventoryInfo> inventoryInfoList = inventoryInfoService.list(queryWrapper1);
                     InventoryInfoOutputDTO inventoryInfoOutputDTO = new InventoryInfoOutputDTO();
-                    for (InventoryInfo inven : inventoryInfoList
-                    ) {
-                        BeanUtils.copyProperties(inven, productInfo1);
-                        BeanUtils.copyProperties(inven, inventoryInfoOutputDTO);
+                    for (InventoryInfo inven:inventoryInfoList
+                         ) {
+                        BeanUtils.copyProperties(productInfo1,inventoryInfoInputDTO);
+                        BeanUtils.copyProperties(inven,inventoryInfoOutputDTO);
+                        inventoryInfoOutputDTO.setProductId(productInfo1.getId());
+                        inventoryInfoOutputDTO.setInventoryId(inven.getId());
                         inventoryInfoOutputDTOS.add(inventoryInfoOutputDTO);
                     }
                 }
