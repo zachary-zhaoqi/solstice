@@ -15,5 +15,15 @@ import java.util.List;
 @Accessors(chain = true)
 public class InventoryInfoInputDTO {
 
+    private String barCode;
+
+    private Integer brandId;
+
+    private Integer categorySn;
+
+    private String name;
+
+    private String specification;
+
     private List<LocalDateTime> creatTimeRange;//传入一个size=2的list，开始与结束的时间
 }

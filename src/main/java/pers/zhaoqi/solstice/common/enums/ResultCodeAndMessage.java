@@ -20,4 +20,5 @@ public class ResultCodeAndMessage {
     public static final String SUCCESS_QUERY_MESSAGE = "数据查询成功;";
 
     public static final String FAIL_INPUT_DATA_REPEAT = "传入数据发生重复;";
+    public static final String SELECT_NULL = "查询为空;";
 }

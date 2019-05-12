@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pers.zhaoqi.solstice.brand.service.IBrandInfoService;
-import pers.zhaoqi.solstice.common.dto.JSONArrayInputDTO;
+//import pers.zhaoqi.solstice.common.dto.JSONArrayInputDTO;
 import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
