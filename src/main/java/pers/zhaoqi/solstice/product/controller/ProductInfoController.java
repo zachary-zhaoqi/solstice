@@ -8,8 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pers.zhaoqi.solstice.brand.service.IBrandInfoService;
-//import pers.zhaoqi.solstice.common.dto.JSONArrayInputDTO;
-import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
@@ -19,10 +17,9 @@ import pers.zhaoqi.solstice.product.dto.ProductInfoInputDTO;
 import pers.zhaoqi.solstice.product.entity.ProductInfo;
 import pers.zhaoqi.solstice.product.service.IProductInfoService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+//import pers.zhaoqi.solstice.common.dto.JSONArrayInputDTO;
 
 
 /**
