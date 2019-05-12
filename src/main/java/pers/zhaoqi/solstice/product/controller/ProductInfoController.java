@@ -8,6 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pers.zhaoqi.solstice.brand.service.IBrandInfoService;
+import pers.zhaoqi.solstice.common.dto.JSONArrayInputDTO;
+import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
@@ -17,7 +19,10 @@ import pers.zhaoqi.solstice.product.dto.ProductInfoInputDTO;
 import pers.zhaoqi.solstice.product.entity.ProductInfo;
 import pers.zhaoqi.solstice.product.service.IProductInfoService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -44,7 +49,7 @@ public class ProductInfoController {
     private IBrandInfoService brandInfoService;
 
     @GetMapping()
-    public ActionResult queryProduct(@RequestBody ProductInfoInputDTO productInfoInputDTO) {
+    public ActionResult queryProduct(ProductInfoInputDTO productInfoInputDTO) {
         try {
             ProductInfo productInfo = new ProductInfo();
             BeanUtils.copyProperties(productInfoInputDTO, productInfo);
@@ -57,11 +62,27 @@ public class ProductInfoController {
         }
     }
 
+    @DeleteMapping()
+    @ResponseBody()
+    public ActionResult removeProduct(@RequestBody List<Integer> idList){
+        try {
+            ProductInfo productInfo=new ProductInfo();
+            QueryWrapper queryWrapper=new QueryWrapper(productInfo);
+            queryWrapper.in("id",idList);
+            productInfoService.remove(queryWrapper);
+
+            return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_REMOVE_MESSAGE);
+        }catch (Exception e){
+            logger.debug(MESSAGE_HEAD+"removeProduct"+e.getMessage());
+            return Result.failed(ResultCodeAndMessage.FAIL_REMOVE,MESSAGE_HEAD+ResultCodeAndMessage.FAIL_REMOVE_MESSAGE);
+        }
+    }
+
     @PostMapping("/{name}")
     public ActionResult SaveProduct(@RequestBody ProductInfo productInfo) {
         QueryWrapper queryWrapper = new QueryWrapper(new ProductInfo().setName(productInfo.getName()));
         if (productInfoService.count(queryWrapper) > 0) {
-            return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_ENTITY_REPEAT + "产品名称");
+            return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_INPUT_DATA_REPEAT + "产品名称");
         }
 
         Utils.FillCreate(productInfo);

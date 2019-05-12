@@ -1,6 +1,8 @@
 package pers.zhaoqi.solstice.product.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import pers.zhaoqi.solstice.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,6 +39,7 @@ public class ProductInfo extends BaseEntity {
     private String brandName;
 
     @ApiModelProperty(value = "产品名称")
+    @TableField("`name`")
     private String name;
 
     @ApiModelProperty(value = "条形码")
@@ -46,6 +49,7 @@ public class ProductInfo extends BaseEntity {
     private String barCodeUrl;
 
     @ApiModelProperty(value = "产品详细描述")
+    @TableField("`describe`")
     private String describe;
 
     @ApiModelProperty(value = "产品图片URL")
