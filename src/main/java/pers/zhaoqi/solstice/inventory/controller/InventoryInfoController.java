@@ -51,37 +51,36 @@ public class InventoryInfoController {
     @GetMapping
     public ActionResult queryInventoryInfo(@RequestBody InventoryInfoInputDTO inventoryInfoInputDTO) {
         try {
+            //todo:先判断用于查询product的四个属性是否为空，若不为空再查，为空则直接查inventoryInfo
             ProductInfo productInfo = new ProductInfo();
             BeanUtils.copyProperties(inventoryInfoInputDTO, productInfo);
-            QueryWrapper queryWrapper = new QueryWrapper(productInfo);
-            List<ProductInfo> productInfoList = productInfoService.list(queryWrapper);
-            List<InventoryInfoOutputDTO> inventoryInfoOutputDTOS = new ArrayList<InventoryInfoOutputDTO>();
-            if (productInfoList != null && productInfoList.size() != 0) {
-                for (ProductInfo productInfo1 : productInfoList
-                ) {
+            QueryWrapper productInfoQueryWrapper = new QueryWrapper(productInfo);
+            List<ProductInfo> productInfoList = productInfoService.list(productInfoQueryWrapper);
+            List<InventoryInfoOutputDTO> inventoryInfoOutputDTOList = new ArrayList<>();
+            if (productInfoList != null && productInfoList.size() != 0) {//todo:查询到的productList只取其id 组装为list，然后用wrapper的in方法来使用即可
+                for (ProductInfo productInfoItem : productInfoList) {
                     InventoryInfo inventoryInfo = new InventoryInfo();
-                    BeanUtils.copyProperties(productInfo1,inventoryInfo);
-                    QueryWrapper queryWrapper1 = new QueryWrapper(inventoryInfo);
-                    if (inventoryInfoInputDTO.getCreatTimeRange().size() != 0){
-                        queryWrapper.between("createTime",inventoryInfoInputDTO.getCreatTimeRange().get(0),inventoryInfoInputDTO.getCreatTimeRange().get(1));
+                    BeanUtils.copyProperties(productInfoItem, inventoryInfo);
+                    QueryWrapper inventoryInfoQueryWrapper = new QueryWrapper(inventoryInfo);
+                    if (inventoryInfoInputDTO.getCreatTimeRange() != null && inventoryInfoInputDTO.getCreatTimeRange().size() != 0) {
+                        productInfoQueryWrapper.between("createTime", inventoryInfoInputDTO.getCreatTimeRange().get(0), inventoryInfoInputDTO.getCreatTimeRange().get(1));
                     }
-                    List<InventoryInfo> inventoryInfoList = inventoryInfoService.list(queryWrapper1);
+                    List<InventoryInfo> inventoryInfoList = inventoryInfoService.list(inventoryInfoQueryWrapper);
                     InventoryInfoOutputDTO inventoryInfoOutputDTO = new InventoryInfoOutputDTO();
-                    for (InventoryInfo inven:inventoryInfoList
-                         ) {
-                        BeanUtils.copyProperties(productInfo1,inventoryInfoInputDTO);
-                        BeanUtils.copyProperties(inven,inventoryInfoOutputDTO);
-                        inventoryInfoOutputDTO.setProductId(productInfo1.getId());
-                        inventoryInfoOutputDTO.setInventoryId(inven.getId());
-                        inventoryInfoOutputDTOS.add(inventoryInfoOutputDTO);
+                    for (InventoryInfo inventoryInfoItem : inventoryInfoList) {
+                        BeanUtils.copyProperties(productInfoItem, inventoryInfoOutputDTO);
+                        BeanUtils.copyProperties(inventoryInfoItem, inventoryInfoOutputDTO);
+                        inventoryInfoOutputDTO.setProductId(productInfoItem.getId());
+                        inventoryInfoOutputDTO.setInventoryId(inventoryInfoItem.getId());
+                        inventoryInfoOutputDTOList.add(inventoryInfoOutputDTO);
                     }
                 }
-                return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_QUERY_MESSAGE, inventoryInfoOutputDTOS);
+                return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_QUERY_MESSAGE, inventoryInfoOutputDTOList);
             } else {
-                return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SELECT_NULL, productInfoList);
+                return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SELECT_NULL, productInfoList);//todo:成功返回上面的那个，出错了返回下面那个，这个就不需要了。
             }
         } catch (Exception e) {
-            logger.debug(MESSAGE_HEAD + "queryProduct" + e.getMessage());
+            logger.debug(MESSAGE_HEAD + ResultCodeAndMessage.FAIL_QUERY_MESSAGE+"\n"+ e.getMessage());
             return Result.failed(ResultCodeAndMessage.FAIL_QUERY, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_QUERY_MESSAGE);
         }
     }
