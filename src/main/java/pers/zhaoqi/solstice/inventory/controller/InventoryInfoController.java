@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 import pers.zhaoqi.solstice.common.result.ActionResult;
-import pers.zhaoqi.solstice.inventory.entity.InventoryInfo;
+import pers.zhaoqi.solstice.inventory.dto.InventoryInfoInputDTO;
 
 /**
  * <p>
