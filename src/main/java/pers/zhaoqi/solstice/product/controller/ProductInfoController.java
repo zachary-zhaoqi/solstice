@@ -79,7 +79,7 @@ public class ProductInfoController {
     public ActionResult SaveProduct(@RequestBody ProductInfo productInfo) {
         QueryWrapper queryWrapper = new QueryWrapper(new ProductInfo().setName(productInfo.getName()));
         if (productInfoService.count(queryWrapper) > 0) {
-            return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_INPUT_DATA_REPEAT + "产品名称");
+            return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_INPUT_DATA_REPEAT_MESSAGE + "产品名称");
         }
 
         Utils.FillCreate(productInfo);
@@ -87,24 +87,13 @@ public class ProductInfoController {
             productInfo.setBrandName(brandInfoService.getById(productInfo.getBrandId()).getName());
         if (productInfo.getCategorySn() != null)
             productInfo.setCategoryName(dataDictionaryService.getById(productInfo.getCategorySn()).getLabelZhCn());
-        productInfo.setBarCode(GeneratesUniqueCode());
+        productInfo.setBarCode(Utils.GeneratesUniqueCode());
 
         if (productInfoService.save(productInfo)) {
             return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_SAVA_MESSAGE);
         } else {
             return Result.failed(ResultCodeAndMessage.FAIL_SAVA, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_SAVA_MESSAGE);
         }
-    }
-
-    /**
-     * 生成唯一的编码
-     * 格式:年月日时分秒+六位哈希码
-     *
-     * @return
-     */
-    private String GeneratesUniqueCode() {
-//        todo：陈亮
-        return null;
     }
 
 }

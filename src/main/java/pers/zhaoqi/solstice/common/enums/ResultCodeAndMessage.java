@@ -1,5 +1,7 @@
 package pers.zhaoqi.solstice.common.enums;
 
+import io.swagger.models.auth.In;
+
 public class ResultCodeAndMessage {
 
     public static final Integer FAIL_CODE = 500;//错误代码
@@ -19,6 +21,9 @@ public class ResultCodeAndMessage {
     public static final String FAIL_QUERY_MESSAGE = "数据查询失败;";
     public static final String SUCCESS_QUERY_MESSAGE = "数据查询成功;";
 
-    public static final String FAIL_INPUT_DATA_REPEAT = "传入数据发生重复;";
     public static final String SELECT_NULL = "查询为空;";
+    public static final Integer FAIL_INPUT_DATA_DEFICIENCY = 520;
+    public static final String FAIL_INPUT_DATA_DEFICIENCY_MESSAGE = "传入数据缺失;";
+    public static final Integer FAIL_INPUT_DATA_REPEAT = 521;
+    public static final String FAIL_INPUT_DATA_REPEAT_MESSAGE = "传入数据发生重复;";
 }

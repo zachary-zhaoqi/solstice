@@ -36,8 +36,8 @@ logging:
 #            mapper: DEBUG
           product:
             mapper: DEBUG
-#          shippingaddress:
-#            mapper: DEBUG
+          shippingaddress:
+            mapper: DEBUG
 #          trolley:
 #            mapper: DEBUG
 #          userinfo:

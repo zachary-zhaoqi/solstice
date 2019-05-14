@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.inventory.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,6 +15,12 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class InventoryInfoInputDTO {
+
+    @ApiModelProperty(value = "产品ID")
+    private Integer productId;
+
+    @ApiModelProperty(value = "库存数量")
+    private Integer number;
 
     private String barCode;
 

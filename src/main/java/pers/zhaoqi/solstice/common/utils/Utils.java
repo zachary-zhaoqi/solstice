@@ -15,6 +15,7 @@ import pers.zhaoqi.solstice.userlogin.jwt.JWTUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @Component
@@ -23,8 +24,8 @@ public class Utils {
     private static IUserInfoService userInfoService;
 
     @Autowired()
-    public void setUserInfoService(IUserInfoService userInfoService){
-        Utils.userInfoService=userInfoService;
+    public void setUserInfoService(IUserInfoService userInfoService) {
+        Utils.userInfoService = userInfoService;
     }
 
     public static Claims getClaimsForCookies() throws Exception {
@@ -62,4 +63,33 @@ public class Utils {
         }
     }
 
+    public static UserInfo getCurrentUser() throws Exception {
+        Claims claims = Utils.getClaimsForCookies();
+        Integer currentUserId = (Integer) claims.get(KeyEnums.CLAIMS_USER_ID);
+        UserInfo userInfo = userInfoService.getById(currentUserId);
+        return userInfo;
+    }
+
+    public static boolean checkObjFieldIsNull(Object obj) throws IllegalAccessException {
+
+        boolean flag = false;
+        for (Field f : obj.getClass().getDeclaredFields()) {
+            f.setAccessible(true);
+            if (f.get(obj) == null || f.get(obj).equals("")) {
+                flag = true;
+                return flag;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 生成唯一的编码
+     * 格式:年月日时分秒+六位哈希码
+     *
+     * @return
+     */
+    public static String GeneratesUniqueCode() {
+        return null;
+    }
 }

@@ -2,6 +2,7 @@ package pers.zhaoqi.solstice.inventory.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
+import pers.zhaoqi.solstice.common.utils.Utils;
 import pers.zhaoqi.solstice.inventory.dto.InventoryInfoInputDTO;
 import pers.zhaoqi.solstice.inventory.dto.InventoryInfoOutputDTO;
 import pers.zhaoqi.solstice.inventory.entity.InventoryInfo;
@@ -20,6 +22,7 @@ import pers.zhaoqi.solstice.inventory.service.IInventoryInfoService;
 import pers.zhaoqi.solstice.product.entity.ProductInfo;
 import pers.zhaoqi.solstice.product.service.IProductInfoService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,37 +54,82 @@ public class InventoryInfoController {
     @GetMapping
     public ActionResult queryInventoryInfo(@RequestBody InventoryInfoInputDTO inventoryInfoInputDTO) {
         try {
-            //todo:先判断用于查询product的四个属性是否为空，若不为空再查，为空则直接查inventoryInfo
             ProductInfo productInfo = new ProductInfo();
             BeanUtils.copyProperties(inventoryInfoInputDTO, productInfo);
-            QueryWrapper productInfoQueryWrapper = new QueryWrapper(productInfo);
-            List<ProductInfo> productInfoList = productInfoService.list(productInfoQueryWrapper);
+            InventoryInfo inventoryInfo = new InventoryInfo();
+            BeanUtils.copyProperties(inventoryInfoInputDTO, inventoryInfo);
+            QueryWrapper inventoryInfoQueryWrapper = new QueryWrapper(inventoryInfo);
+            //判断用于查询product中是否有条件，若有根据其查出商品id列表，用作查库存的条件
+            if (Utils.checkObjFieldIsNull(productInfo)) {
+                QueryWrapper productInfoQueryWrapper = new QueryWrapper(productInfo);
+                productInfoQueryWrapper.select("id");
+                List<Integer> idList = productInfoService.list(productInfoQueryWrapper);
+                inventoryInfoQueryWrapper.in("product_id", idList);
+            }
+            List<LocalDateTime> creatTimeRange = inventoryInfoInputDTO.getCreatTimeRange();
+            if (creatTimeRange != null) {
+                inventoryInfoQueryWrapper.between("create_ime", creatTimeRange.get(0), creatTimeRange.get(1));
+            }
+            List<InventoryInfo> inventoryInfoList = inventoryInfoService.list(inventoryInfoQueryWrapper);
+
+            //查询所有相关联的产品信息
+            inventoryInfoQueryWrapper.select("product_id");
+            List productIdList = inventoryInfoService.list(inventoryInfoQueryWrapper);
+            QueryWrapper queryWrapper = new QueryWrapper();
+            inventoryInfoQueryWrapper.in("id", productIdList);
+            List<ProductInfo> productInfoList = productInfoService.list(queryWrapper);
+
+            //装配至outputDTO中
             List<InventoryInfoOutputDTO> inventoryInfoOutputDTOList = new ArrayList<>();
-            if (productInfoList != null && productInfoList.size() != 0) {//todo:查询到的productList只取其id 组装为list，然后用wrapper的in方法来使用即可
-                for (ProductInfo productInfoItem : productInfoList) {
-                    InventoryInfo inventoryInfo = new InventoryInfo();
-                    BeanUtils.copyProperties(productInfoItem, inventoryInfo);
-                    QueryWrapper inventoryInfoQueryWrapper = new QueryWrapper(inventoryInfo);
-                    if (inventoryInfoInputDTO.getCreatTimeRange() != null && inventoryInfoInputDTO.getCreatTimeRange().size() != 0) {
-                        productInfoQueryWrapper.between("createTime", inventoryInfoInputDTO.getCreatTimeRange().get(0), inventoryInfoInputDTO.getCreatTimeRange().get(1));
-                    }
-                    List<InventoryInfo> inventoryInfoList = inventoryInfoService.list(inventoryInfoQueryWrapper);
-                    InventoryInfoOutputDTO inventoryInfoOutputDTO = new InventoryInfoOutputDTO();
-                    for (InventoryInfo inventoryInfoItem : inventoryInfoList) {
+            for (InventoryInfo inventoryInfoItem : inventoryInfoList) {
+                InventoryInfoOutputDTO inventoryInfoOutputDTO = new InventoryInfoOutputDTO();
+                for(int i = 0; i < productInfoList.size(); i++)
+                {
+                    ProductInfo productInfoItem=productInfoList.get(i);
+                    if (productInfoItem.getId()==inventoryInfoItem.getProductId()){
                         BeanUtils.copyProperties(productInfoItem, inventoryInfoOutputDTO);
-                        BeanUtils.copyProperties(inventoryInfoItem, inventoryInfoOutputDTO);
                         inventoryInfoOutputDTO.setProductId(productInfoItem.getId());
-                        inventoryInfoOutputDTO.setInventoryId(inventoryInfoItem.getId());
-                        inventoryInfoOutputDTOList.add(inventoryInfoOutputDTO);
+                        productInfoList.remove(i);
                     }
                 }
-                return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_QUERY_MESSAGE, inventoryInfoOutputDTOList);
-            } else {
-                return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SELECT_NULL, productInfoList);//todo:成功返回上面的那个，出错了返回下面那个，这个就不需要了。
+                BeanUtils.copyProperties(inventoryInfoItem, inventoryInfoOutputDTO);
+                inventoryInfoOutputDTO.setInventoryId(inventoryInfoItem.getId());
+                inventoryInfoOutputDTOList.add(inventoryInfoOutputDTO);
             }
+            return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_QUERY_MESSAGE, inventoryInfoOutputDTOList);
+
         } catch (Exception e) {
-            logger.debug(MESSAGE_HEAD + ResultCodeAndMessage.FAIL_QUERY_MESSAGE+"\n"+ e.getMessage());
+            logger.debug(MESSAGE_HEAD + ResultCodeAndMessage.FAIL_QUERY_MESSAGE + "\n" + e.getMessage());
             return Result.failed(ResultCodeAndMessage.FAIL_QUERY, MESSAGE_HEAD + ResultCodeAndMessage.FAIL_QUERY_MESSAGE);
         }
     }
+
+    public ActionResult newInventoryInfo(@RequestBody InventoryInfoInputDTO inventoryInfoInputDTO){
+        if (inventoryInfoInputDTO.getProductId() == null) {
+            return Result.failed(ResultCodeAndMessage.FAIL_INPUT_DATA_DEFICIENCY,MESSAGE_HEAD + ResultCodeAndMessage.FAIL_INPUT_DATA_DEFICIENCY_MESSAGE+"必须存在产品ID：productId");
+        }
+        InventoryInfo inventoryInfo=new InventoryInfo();
+        Utils.FillCreate(inventoryInfo);
+        inventoryInfo.setBatchSn("inv"+Utils.GeneratesUniqueCode());
+        inventoryInfo.setProductId(inventoryInfoInputDTO.getProductId());
+
+        if (inventoryInfoInputDTO.getSpecification() == null) {
+            inventoryInfo.setSpecification("普装");
+        } else {
+            inventoryInfo.setSpecification(inventoryInfoInputDTO.getSpecification());
+        }
+
+        if (inventoryInfoInputDTO.getNumber() == null) {
+            inventoryInfo.setNumber(0);
+        } else {
+            inventoryInfo.setSpecification(inventoryInfoInputDTO.getSpecification());
+        }
+
+        if (inventoryInfoService.save(inventoryInfo)){
+            return Result.success(MESSAGE_HEAD + ResultCodeAndMessage.SUCCESS_SAVA_MESSAGE,inventoryInfo);
+        }else {
+            return Result.failed(ResultCodeAndMessage.FAIL_SAVA,MESSAGE_HEAD+ResultCodeAndMessage.FAIL_SAVA_MESSAGE);
+        }
+    }
+
 }
