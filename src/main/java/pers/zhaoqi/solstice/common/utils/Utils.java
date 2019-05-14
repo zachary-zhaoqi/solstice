@@ -16,7 +16,9 @@ import pers.zhaoqi.solstice.userlogin.jwt.JWTUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Component
 public class Utils {
@@ -85,11 +87,15 @@ public class Utils {
 
     /**
      * 生成唯一的编码
-     * 格式:年月日时分秒+六位哈希码
+     * 格式:年月日时分秒+九位哈希码
      *
      * @return
      */
     public static String GeneratesUniqueCode() {
-        return null;
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
+        //System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
+        String result = df.format(new Date())+df.format(new Date()).hashCode();
+        result = result.replace("-","");
+        return result;
     }
 }
