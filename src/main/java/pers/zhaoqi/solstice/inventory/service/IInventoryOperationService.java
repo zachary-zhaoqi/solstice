@@ -1,5 +1,6 @@
 package pers.zhaoqi.solstice.inventory.service;
 
+import pers.zhaoqi.solstice.inventory.dto.InventoryOperationInputDTO;
 import pers.zhaoqi.solstice.inventory.entity.InventoryOperation;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IInventoryOperationService extends IService<InventoryOperation> {
 
+    boolean newInventoryOperation(InventoryOperationInputDTO inventoryOperationInputDTO) throws Exception;
 }

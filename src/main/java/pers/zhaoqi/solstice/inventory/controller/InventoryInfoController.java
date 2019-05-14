@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pers.zhaoqi.solstice.common.enums.ResultCodeAndMessage;
 import pers.zhaoqi.solstice.common.result.ActionResult;
 import pers.zhaoqi.solstice.common.result.Result;
@@ -40,10 +37,10 @@ public class InventoryInfoController {
 
     public static final String MESSAGE_HEAD = "[库存记录]";
 
-    Logger logger = LoggerFactory.getLogger(ProductInfo.class);
+    Logger logger = LoggerFactory.getLogger(InventoryInfoController.class);
     @Autowired
     private IProductInfoService productInfoService;
-
+    @Autowired
     private IInventoryInfoService inventoryInfoService;
 
     /**
@@ -52,7 +49,7 @@ public class InventoryInfoController {
      * @author zhaoqi
      */
     @GetMapping
-    public ActionResult queryInventoryInfo(@RequestBody InventoryInfoInputDTO inventoryInfoInputDTO) {
+    public ActionResult queryInventoryInfo(InventoryInfoInputDTO inventoryInfoInputDTO) {
         try {
             ProductInfo productInfo = new ProductInfo();
             BeanUtils.copyProperties(inventoryInfoInputDTO, productInfo);
@@ -60,7 +57,7 @@ public class InventoryInfoController {
             BeanUtils.copyProperties(inventoryInfoInputDTO, inventoryInfo);
             QueryWrapper inventoryInfoQueryWrapper = new QueryWrapper(inventoryInfo);
             //判断用于查询product中是否有条件，若有根据其查出商品id列表，用作查库存的条件
-            if (Utils.checkObjFieldIsNull(productInfo)) {
+            if (!Utils.checkObjFieldIsNull(productInfo)) {
                 QueryWrapper productInfoQueryWrapper = new QueryWrapper(productInfo);
                 productInfoQueryWrapper.select("id");
                 List<Integer> idList = productInfoService.list(productInfoQueryWrapper);
@@ -75,9 +72,12 @@ public class InventoryInfoController {
             //查询所有相关联的产品信息
             inventoryInfoQueryWrapper.select("product_id");
             List productIdList = inventoryInfoService.list(inventoryInfoQueryWrapper);
-            QueryWrapper queryWrapper = new QueryWrapper();
-            inventoryInfoQueryWrapper.in("id", productIdList);
-            List<ProductInfo> productInfoList = productInfoService.list(queryWrapper);
+            List<ProductInfo> productInfoList=new ArrayList<>();
+            if (productIdList.size() > 0) {
+                QueryWrapper queryWrapper = new QueryWrapper();
+                inventoryInfoQueryWrapper.in("id", productIdList);
+                productInfoList = productInfoService.list(queryWrapper);
+            }
 
             //装配至outputDTO中
             List<InventoryInfoOutputDTO> inventoryInfoOutputDTOList = new ArrayList<>();
@@ -104,6 +104,7 @@ public class InventoryInfoController {
         }
     }
 
+    @PostMapping
     public ActionResult newInventoryInfo(@RequestBody InventoryInfoInputDTO inventoryInfoInputDTO){
         if (inventoryInfoInputDTO.getProductId() == null) {
             return Result.failed(ResultCodeAndMessage.FAIL_INPUT_DATA_DEFICIENCY,MESSAGE_HEAD + ResultCodeAndMessage.FAIL_INPUT_DATA_DEFICIENCY_MESSAGE+"必须存在产品ID：productId");
